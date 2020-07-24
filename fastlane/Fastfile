@@ -1,0 +1,40 @@
+before_all do
+    ensure_git_branch
+    ensure_git_status_clean
+    git_pull
+end
+
+platform :ios do
+    private_lane :update_version do
+        app_store_version = get_app_store_version_number(bundle_id: 'ReactNativeFastlane')
+        plist_version = get_version_number_from_plist(xcodeproj: './ios/ReactNativeFastlane.xcodeproj')
+        if Gem::Version.new(plist_version.to_f) == Gem::Version.new(app_store_version.to_f)
+            UI.message "bumping minor"
+            increment_version_number_in_plist(xcodeproj: './ios/ReactNativeFastlane.xcodeproj', bump_type: 'minor')
+        else
+            UI.message "bumping patch"
+            increment_version_number_in_plist(xcodeproj: './ios/ReactNativeFastlane.xcodeproj', bump_type: 'patch')
+    end
+
+    private_lane :staging_build do
+        increment_build_number_in_plist(xcodeproj: './ios/ReactNativeFastlane.xcodeproj', target: 'ReactNativeFastlane')
+        gym(scheme: 'ReactNativeFastlane-staging', workspace: './ios/ReactNativeFastlane.xcworkspace')
+    end
+
+    lane :beta do
+        staging_build
+        upload_to_testflight(username: 'youremail@gmail.com', app_identifier: 'ReactNativeFastlane')
+        commit_version_bump(message: 'bump build')
+        push_to_git_remote
+    end
+end
+
+platform :android do
+    desc "Android build and release to beta"
+    lane :beta do
+        increment_version_code(app_project_dir: './android/app')
+        gradle(task: 'clean', project_dir: './android/')
+        gradle(task: 'bundle', build_type: 'Release', project_dir: './android')
+        supply(track: 'beta', aab: './android/app/build/outputs/bundle/release/app-release.aab')
+    end 
+end

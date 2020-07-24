@@ -1,0 +1,34 @@
+{
+  "device_frame_version": "latest",
+  "default": {
+    "background": "./background.png",
+    "title": {
+      "color": "#ffffff"
+    },
+    "padding": 50
+  },
+  "data": [
+    {
+      "filter": "Home",
+      "keyword": {
+        "color": "#FF0000",
+        "text": "HOME"
+      },
+      "title": {
+        "color": "#FFFFFF",
+        "text": "Screen"
+      }
+    },
+    {
+      "filter": "Settings",
+      "keyword": {
+        "color": "#FF0000",
+        "text": "Settings"
+      },
+      "title": {
+        "color": "#FFFFFF",
+        "text": "Screen"
+      }
+    }
+  ]
+}
