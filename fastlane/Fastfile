@@ -14,6 +14,7 @@ platform :ios do
         else
             UI.message "bumping patch"
             increment_version_number_in_plist(xcodeproj: './ios/ReactNativeFastlane.xcodeproj', bump_type: 'patch')
+        end
     end
 
     private_lane :staging_build do
