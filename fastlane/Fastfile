@@ -85,7 +85,7 @@ private_lane :select_app_version do |options|
     target_version_label = UI.select("What version do you want to target?", [
         "All users",
         "Most recent major (#{current_major})",
-        "Most recent minor (#{current_mior})",
+        "Most recent minor (#{current_minor})",
         "Current version (#{current_version})"
     ])
 
